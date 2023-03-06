@@ -1,3 +1,93 @@
+#include <iostream>
+#include <opencv2/opencv.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+
+
+using namespace std;
+using namespace cv;
+
+int main()
+{
+    // Carrega as duas imagens 
+    Mat img1 = imread("C:/Users/kusan/Downloads/vsCodePython/fish_1.jpg");
+    Mat img2 = imread("C:/Users/kusan/Downloads/vsCodePython/fish_2.jpg");
+
+
+    // Converte as imagens para escala de cinza
+    Mat gray1, gray2;
+    cvtColor(img1, gray1, COLOR_BGR2GRAY);
+    cvtColor(img2, gray2, COLOR_BGR2GRAY);
+
+    // Calcula a similaridade usando o Ìndice de similaridade estrutural (SSIM)
+    //N„o consigo identificar o por que disto. irei verificar depois llkkok
+    double similarity = matchTemplate(gray1, gray2, TM_CCOEFF_NORMED)[0][0];
+    //double similarity = matchTemplate(gray1, gray2, TM_CCOEFF_NORMED)[0][0];
+    //double similarity = matchTemplate(gray1, gray2, static_cast<int>(TM_CCOEFF_NORMED))[0][0];
+
+
+
+
+
+    // Exibe o valor da similaridade na tela
+    cout << "A similaridade entre as imagens È " << similarity << endl;
+
+    // Encontra objetos similares nas imagens usando o algoritmo SIFT
+    Ptr<SIFT> sift = SIFT::create();
+    vector<KeyPoint> kp1, kp2;
+    Mat des1, des2;
+    sift->detectAndCompute(gray1, noArray(), kp1, des1);
+    sift->detectAndCompute(gray2, noArray(), kp2, des2);
+    BFMatcher bf(NORM_L2);
+    vector<vector<DMatch>> matches;
+    bf.knnMatch(des1, des2, matches, 2);
+    vector<DMatch> good;
+    for (size_t i = 0; i < matches.size(); ++i)
+    {
+        if (matches[i][0].distance < 0.75 * matches[i][1].distance)
+        {
+            good.push_back(matches[i][0]);
+        }
+    }
+
+    // Cria uma imagem em branco para desenhar os contornos
+    int h1 = gray1.rows, w1 = gray1.cols;
+    int h2 = gray2.rows, w2 = gray2.cols;
+    Mat result(max(h1, h2), w1 + w2, CV_8UC3, Scalar(0, 0, 0));
+    img1.copyTo(result(Rect(0, 0, w1, h1)));
+    img2.copyTo(result(Rect(w1, 0, w2, h2)));
+
+    // Desenha os contornos nos objetos similares encontrados
+    for (size_t i = 0; i < good.size(); ++i)
+    {
+        Point2f pt1 = kp1[good[i].queryIdx].pt;
+        Point2f pt2 = kp2[good[i].trainIdx].pt;
+        pt2.x += w1;
+        line(result, pt1, pt2, Scalar(0, 255, 0), 2);
+    }
+
+    // Codifica as imagens para exibi-las sem a GUI do OpenCV
+    vector<uchar> buf1, buf2, buf3;
+    imencode(".png", img1, buf1);
+    imencode(".png", img2, buf2);
+    imencode(".png", result, buf3);
+
+    // Exibe as imagens usando a biblioteca Pillow
+    Mat im1 = imdecode(buf1, IMREAD_COLOR);
+    Mat im2 = imdecode(buf2, IMREAD_COLOR);
+    Mat im3 = imdecode(buf3, IMREAD_COLOR);
+    imshow("Imagem 1", im1);
+    imshow("Imagem 2", im2);
+    imshow("Imagem 3", im3);
+    waitKey(0);
+
+    return 0;
+}/*
+---------------- -
+
+=======
+>>>>>>> parent of 74d0a40 (Altera√ß√£o do c√≥digo teste para o c√≥digo principal)
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
@@ -14,4 +104,4 @@ int main(int argc, char** argv) {
 
 	return 0;
 
-}
+}*/
