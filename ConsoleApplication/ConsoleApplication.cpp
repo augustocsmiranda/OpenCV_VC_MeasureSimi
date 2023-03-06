@@ -9,6 +9,8 @@ int main(int argc, char** argv) {
 	cv::Mat imagem = cv::imread(caminho);
 	cv::imshow("Imagem", imagem);
 	cv::waitKey(0);
+	
+	//Para segundo commit 
 
 	return 0;
 
