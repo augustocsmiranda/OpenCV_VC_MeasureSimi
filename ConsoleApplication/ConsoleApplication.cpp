@@ -24,9 +24,10 @@ int main()
     // Calcula a similaridade usando o índice de similaridade estrutural (SSIM)
     // 
     //Não consigo identificar o por que disto. irei verificar depois llkkok
+    // 
     //https://docs.opencv.org/4.x/df/dfb/group__imgproc__object.html
     
-    double similarity = matchTemplate(gray1, gray2, TM_CCOEFF_NORMED)[0][0];
+    double similarity = matchTemplate(gray1, gray2, TM_CCOEFF_NORMED)[0][0]; 
 
     //double similarity = matchTemplate(gray1, gray2, TM_CCOEFF_NORMED)[0][0];
     //double similarity = matchTemplate(gray1, gray2, static_cast<int>(TM_CCOEFF_NORMED))[0][0];
