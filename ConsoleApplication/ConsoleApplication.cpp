@@ -28,7 +28,12 @@ int main()
     // 
     //https://docs.opencv.org/4.x/df/dfb/group__imgproc__object.html
     
-    double similarity = matchTemplate(gray1, gray2, TM_CCOEFF_NORMED)[0][0]; 
+    double similarity = matchTemplate(gray1, gray2, TM_CCOEFF_NORMED)[0][0];
+    
+
+   
+
+
     //double similarity = matchTemplate(gray1, gray2, TM_CCOEFF)[0][0];
 
     //double similarity = matchTemplate(gray1, gray2, TM_CCOEFF_NORMED)[0][0];
