@@ -25,9 +25,11 @@ int main()
     // 
     //Não consigo identificar o por que disto. irei verificar depois llkkok
     // Verificar o link abaixo para entender o erro do TM_CCOEFF_NORMED
+    // 
     //https://docs.opencv.org/4.x/df/dfb/group__imgproc__object.html
     
     double similarity = matchTemplate(gray1, gray2, TM_CCOEFF_NORMED)[0][0]; 
+    //double similarity = matchTemplate(gray1, gray2, TM_CCOEFF)[0][0];
 
     //double similarity = matchTemplate(gray1, gray2, TM_CCOEFF_NORMED)[0][0];
     //double similarity = matchTemplate(gray1, gray2, static_cast<int>(TM_CCOEFF_NORMED))[0][0];
