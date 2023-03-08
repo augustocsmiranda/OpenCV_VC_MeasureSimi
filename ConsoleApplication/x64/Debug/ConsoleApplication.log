@@ -1,4 +1,2 @@
 ﻿  ConsoleApplication.cpp
-C:\Users\kusan\Downloads\OpenCV_VC_MeasureSimi\OpenCV_VC_MeasureSimi\ConsoleApplication\ConsoleApplication.cpp(32,25): error C2660: 'cv::matchTemplate': function does not take 3 arguments
-C:\OpenCV\build\include\opencv2\imgproc.hpp(3874,19): message : see declaration of 'cv::matchTemplate'
-C:\Users\kusan\Downloads\OpenCV_VC_MeasureSimi\OpenCV_VC_MeasureSimi\ConsoleApplication\ConsoleApplication.cpp(32,25): message : while trying to match the argument list '(cv::Mat, cv::Mat, int)'
+  ConsoleApplication.vcxproj -> C:\Users\kusan\Downloads\OpenCV_VC_MeasureSimi\OpenCV_VC_MeasureSimi\ConsoleApplication\x64\Debug\ConsoleApplication.exe
