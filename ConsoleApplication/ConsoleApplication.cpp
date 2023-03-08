@@ -60,8 +60,12 @@ using namespace cv;
 int main()
 {
     // Carrega as duas imagens 
-    Mat img1 = imread("C:/Users/kusan/Downloads/vsCodePython/fish_2.jpg");
-    Mat img2 = imread("C:/Users/kusan/Downloads/vsCodePython/fish_1.jpg");
+    //Mat img1 = imread("C:/Users/kusan/Downloads/vsCodePython/fish_2.jpg");
+    //Mat img2 = imread("C:/Users/kusan/Downloads/vsCodePython/fish_1.jpg");
+    Mat img1 = imread("C:/Users/kusan/Downloads/vsCodePython/Peixe_1.jpg");
+    Mat img2 = imread("C:/Users/kusan/Downloads/vsCodePython/Peixe_2.jpg");
+    //Mat img1 = imread("C:/Users/kusan/Downloads/vsCodePython/Gear_1.png");
+    //Mat img2 = imread("C:/Users/kusan/Downloads/vsCodePython/Gear_2.png");
     Mat outPut;
 
     // Converte as imagens para escala de cinza
