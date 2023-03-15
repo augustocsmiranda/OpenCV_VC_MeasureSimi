@@ -4,68 +4,14 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
-/*
-using namespace std;
-using namespace cv;
-
-int main()
-{
-    // Load two images
-    Mat img1 = imread("C:/Users/kusan/Downloads/vsCodePython/fish_1.jpg", IMREAD_GRAYSCALE);
-    Mat img2 = imread("C:/Users/kusan/Downloads/vsCodePython/fish_2.jpg", IMREAD_GRAYSCALE);
-
-    // Create a matrix to store the matching result
-    Mat matchResult;
-
-    // Match the images using cv::matchTemplate with cv::TemplateMatchModes
-    matchTemplate(img1, img2, matchResult, TM_CCOEFF_NORMED);
-
-    // Define the threshold for similarity
-    double threshold = 0.7;
-
-    // Find the location of the best match in the matching result matrix
-    Point bestMatch;
-    minMaxLoc(matchResult, NULL, NULL, NULL, &bestMatch);
-
-    // Check if the best match is above the threshold
-    if (matchResult.at<float>(bestMatch.y, bestMatch.x) >= threshold)
-    {
-        // Define the dimensions of the object found in the image
-        int objectWidth = img2.cols;
-        int objectHeight = img2.rows;
-
-        // Define the top-left and bottom-right corners of the rectangle
-        Point topLeft(bestMatch.x, bestMatch.y);
-        Point bottomRight(bestMatch.x + objectWidth, bestMatch.y + objectHeight);
-
-        // Draw a rectangle around the object in both images
-        rectangle(img1, topLeft, bottomRight, Scalar(255, 0, 0), 2);
-        rectangle(img2, topLeft, bottomRight, Scalar(255, 0, 0), 2);
-    }
-
-    // Display the images
-    namedWindow("Image 1", WINDOW_NORMAL);
-    namedWindow("Image 2", WINDOW_NORMAL);
-    imshow("Image 1", img1);
-    imshow("Image 2", img2);
-    waitKey(0);
-
-    return 0;
-}*/
-
-
 using namespace std;
 using namespace cv;
 
 int main()
 {
     // Carrega as duas imagens 
-    //Mat img1 = imread("C:/Users/kusan/Downloads/vsCodePython/fish_2.jpg");
-    //Mat img2 = imread("C:/Users/kusan/Downloads/vsCodePython/fish_1.jpg");
     Mat img1 = imread("C:/Users/kusan/Downloads/vsCodePython/Peixe_1.jpg");
     Mat img2 = imread("C:/Users/kusan/Downloads/vsCodePython/Peixe_2.jpg");
-    //Mat img1 = imread("C:/Users/kusan/Downloads/vsCodePython/Gear_1.png");
-    //Mat img2 = imread("C:/Users/kusan/Downloads/vsCodePython/Gear_2.png");
     Mat outPut;
 
     // Converte as imagens para escala de cinza
@@ -75,26 +21,16 @@ int main()
 
     // Calcula a similaridade usando o índice de similaridade estrutural (SSIM)
     // 
-    //Não consigo identificar o por que disto. irei verificar depois llkkok
+
     // Verificar o link abaixo para entender o erro do TM_CCOEFF_NORMED
     // 
     //https://docs.opencv.org/4.x/df/dfb/group__imgproc__object.html
     
-    //não existe nenhum construtor adequado para converter de "cv::TemplateMatchsModes" para "cv::debug_build_guard::_OutputArray"
-
-    //double similarity = matchTemplate(gray1, gray2, outPut,TM_CCOEFF_NORMED)[0][0];
-
-    //double similarity = matchTemplate(gray1, gray2, OutputArray(outPut), TM_CCOEFF_NORMED)[0][0];
 
     double similarity;
     matchTemplate(gray1, gray2, outPut, TM_CCOEFF_NORMED);
     similarity = outPut.at<float>(0, 0);
 
-
-    //double similarity = matchTemplate(gray1, gray2, TM_CCOEFF)[0][0];
-
-    //double similarity = matchTemplate(gray1, gray2, TM_CCOEFF_NORMED)[0][0];
-    //double similarity = matchTemplate(gray1, gray2, static_cast<int>(TM_CCOEFF_NORMED))[0][0];
 
     // Exibe o valor da similaridade na tela
     cout << "A similaridade entre as imagens é " << similarity << endl;
@@ -140,14 +76,6 @@ int main()
     imencode(".png", result, buf3);
 
     // Exibe as imagens usando a biblioteca Pillow
-    /*
-    Mat im1 = imdecode(buf1, IMREAD_COLOR);
-    Mat im2 = imdecode(buf2, IMREAD_COLOR);
-    Mat im3 = imdecode(buf3, IMREAD_COLOR);
-    imshow("Imagem 1", im1);
-    imshow("Imagem 2", im2);
-    imshow("Imagem 3", im3);
-    waitKey(0);*/
 
     Mat im1 = imdecode(buf1, IMREAD_COLOR);
     Mat im2 = imdecode(buf2, IMREAD_COLOR);
