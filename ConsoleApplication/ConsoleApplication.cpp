@@ -3,7 +3,8 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
-
+#include <opencv2/features2d.hpp>
+/*
 using namespace std;
 using namespace cv;
 
@@ -116,3 +117,46 @@ int main(int argc, char** argv) {
 	return 0;
 
 }*/
+
+using namespace cv;
+using namespace std;
+
+int main(int argc, char** argv)
+{
+    // Load images
+    Mat img1 = imread("image1.jpg", IMREAD_GRAYSCALE);
+    Mat img2 = imread("image2.jpg", IMREAD_GRAYSCALE);
+
+    // Detect keypoints and extract features
+    Ptr<ORB> orb = ORB::create();
+    vector<KeyPoint> keypoints1, keypoints2;
+    Mat descriptors1, descriptors2;
+    orb->detectAndCompute(img1, noArray(), keypoints1, descriptors1);
+    orb->detectAndCompute(img2, noArray(), keypoints2, descriptors2);
+
+    // Match features
+    vector<DMatch> matches;
+    Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create("BruteForce-Hamming");
+    matcher->match(descriptors1, descriptors2, matches);
+
+    // Filter out bad matches
+    vector<Point2f> points1, points2;
+    for (size_t i = 0; i < matches.size(); i++)
+    {
+        points1.push_back(keypoints1[matches[i].queryIdx].pt);
+        points2.push_back(keypoints2[matches[i].trainIdx].pt);
+    }
+    vector<uchar> status(points1.size());
+    Mat fundamental = findFundamentalMat(points1, points2, FM_RANSAC, 3.0f, 0.99, status);
+
+    // Draw matched keypoints
+    Mat img_matches;
+    drawMatches(img1, keypoints1, img2, keypoints2, matches, img_matches,
+        Scalar::all(-1), Scalar::all(-1), status);
+
+    // Show result
+    imshow("Matches", img_matches);
+    waitKey(0);
+
+    return 0;
+}
