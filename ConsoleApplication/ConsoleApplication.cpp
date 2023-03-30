@@ -4,96 +4,98 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/features2d.hpp>
+#include <vector>
+
 /*
 using namespace std;
 using namespace cv;
 
 int main()
 {
-    // Carrega as duas imagens 
-    Mat img1 = imread("C:/Users/kusan/Downloads/vsCodePython/Peixe_1.jpg");
-    Mat img2 = imread("C:/Users/kusan/Downloads/vsCodePython/Peixe_2.jpg");
-    Mat outPut;
+	// Carrega as duas imagens
+	Mat img1 = imread("C:/Users/kusan/Downloads/vsCodePython/Peixe_1.jpg");
+	Mat img2 = imread("C:/Users/kusan/Downloads/vsCodePython/Peixe_2.jpg");
+	Mat outPut;
 
-    // Converte as imagens para escala de cinza
-    Mat gray1, gray2;
-    cvtColor(img1, gray1, COLOR_BGR2GRAY);
-    cvtColor(img2, gray2, COLOR_BGR2GRAY);
+	// Converte as imagens para escala de cinza
+	Mat gray1, gray2;
+	cvtColor(img1, gray1, COLOR_BGR2GRAY);
+	cvtColor(img2, gray2, COLOR_BGR2GRAY);
 
-    // Calcula a similaridade usando o índice de similaridade estrutural (SSIM)
-    // 
+	// Calcula a similaridade usando o índice de similaridade estrutural (SSIM)
+	//
 
-    // Verificar o link abaixo para entender o erro do TM_CCOEFF_NORMED
-    // 
-    //https://docs.opencv.org/4.x/df/dfb/group__imgproc__object.html
-    
-
-    double similarity;
-    matchTemplate(gray1, gray2, outPut, TM_CCOEFF_NORMED);
-    similarity = outPut.at<float>(0, 0);
+	// Verificar o link abaixo para entender o erro do TM_CCOEFF_NORMED
+	//
+	//https://docs.opencv.org/4.x/df/dfb/group__imgproc__object.html
 
 
-    // Exibe o valor da similaridade na tela
-    cout << "A similaridade entre as imagens é " << similarity << endl;
-
-    // Encontra objetos similares nas imagens usando o algoritmo SIFT
-    Ptr<SIFT> sift = SIFT::create();
-    vector<KeyPoint> kp1, kp2;
-    Mat des1, des2;
-    sift->detectAndCompute(gray1, noArray(), kp1, des1);
-    sift->detectAndCompute(gray2, noArray(), kp2, des2);
-    BFMatcher bf(NORM_L2);
-    vector<vector<DMatch>> matches;
-    bf.knnMatch(des1, des2, matches, 2);
-    vector<DMatch> good;
-    for (size_t i = 0; i < matches.size(); ++i)
-    {
-        if (matches[i][0].distance < 0.75 * matches[i][1].distance)
-        {
-            good.push_back(matches[i][0]);
-        }
-    }
-
-    // Cria uma imagem em branco para desenhar os contornos
-    int h1 = gray1.rows, w1 = gray1.cols;
-    int h2 = gray2.rows, w2 = gray2.cols;
-    Mat result(max(h1, h2), w1 + w2, CV_8UC3, Scalar(0, 0, 0));
-    img1.copyTo(result(Rect(0, 0, w1, h1)));
-    img2.copyTo(result(Rect(w1, 0, w2, h2)));
-
-    // Desenha os contornos nos objetos similares encontrados
-    for (size_t i = 0; i < good.size(); ++i)
-    {
-        Point2f pt1 = kp1[good[i].queryIdx].pt;
-        Point2f pt2 = kp2[good[i].trainIdx].pt;
-        pt2.x += w1;
-        line(result, pt1, pt2, Scalar(0, 255, 0), 2);
-    }
-
-    // Codifica as imagens para exibi-las sem a GUI do OpenCV
-    vector<uchar> buf1, buf2, buf3;
-    imencode(".png", img1, buf1);
-    imencode(".png", img2, buf2);
-    imencode(".png", result, buf3);
-
-    // Exibe as imagens usando a biblioteca Pillow
-
-    Mat im1 = imdecode(buf1, IMREAD_COLOR);
-    Mat im2 = imdecode(buf2, IMREAD_COLOR);
-    Mat im3 = imdecode(buf3, IMREAD_COLOR);
-
-    // Redimensionando a imagem 3 para 1024x768
-    resize(im1, im1, Size(1920, 1080));
-    resize(im2, im2, Size(1920, 1080));
-    resize(im3, im3, Size(1920, 1080));
-
-    imshow("Imagem 1", im1);
-    imshow("Imagem 2", im2);
-    imshow("Imagem 3", im3);
-    waitKey(0);
+	double similarity;
+	matchTemplate(gray1, gray2, outPut, TM_CCOEFF_NORMED);
+	similarity = outPut.at<float>(0, 0);
 
 
-    return 0;
+	// Exibe o valor da similaridade na tela
+	cout << "A similaridade entre as imagens é " << similarity << endl;
+
+	// Encontra objetos similares nas imagens usando o algoritmo SIFT
+	Ptr<SIFT> sift = SIFT::create();
+	vector<KeyPoint> kp1, kp2;
+	Mat des1, des2;
+	sift->detectAndCompute(gray1, noArray(), kp1, des1);
+	sift->detectAndCompute(gray2, noArray(), kp2, des2);
+	BFMatcher bf(NORM_L2);
+	vector<vector<DMatch>> matches;
+	bf.knnMatch(des1, des2, matches, 2);
+	vector<DMatch> good;
+	for (size_t i = 0; i < matches.size(); ++i)
+	{
+		if (matches[i][0].distance < 0.75 * matches[i][1].distance)
+		{
+			good.push_back(matches[i][0]);
+		}
+	}
+
+	// Cria uma imagem em branco para desenhar os contornos
+	int h1 = gray1.rows, w1 = gray1.cols;
+	int h2 = gray2.rows, w2 = gray2.cols;
+	Mat result(max(h1, h2), w1 + w2, CV_8UC3, Scalar(0, 0, 0));
+	img1.copyTo(result(Rect(0, 0, w1, h1)));
+	img2.copyTo(result(Rect(w1, 0, w2, h2)));
+
+	// Desenha os contornos nos objetos similares encontrados
+	for (size_t i = 0; i < good.size(); ++i)
+	{
+		Point2f pt1 = kp1[good[i].queryIdx].pt;
+		Point2f pt2 = kp2[good[i].trainIdx].pt;
+		pt2.x += w1;
+		line(result, pt1, pt2, Scalar(0, 255, 0), 2);
+	}
+
+	// Codifica as imagens para exibi-las sem a GUI do OpenCV
+	vector<uchar> buf1, buf2, buf3;
+	imencode(".png", img1, buf1);
+	imencode(".png", img2, buf2);
+	imencode(".png", result, buf3);
+
+	// Exibe as imagens usando a biblioteca Pillow
+
+	Mat im1 = imdecode(buf1, IMREAD_COLOR);
+	Mat im2 = imdecode(buf2, IMREAD_COLOR);
+	Mat im3 = imdecode(buf3, IMREAD_COLOR);
+
+	// Redimensionando a imagem 3 para 1024x768
+	resize(im1, im1, Size(1920, 1080));
+	resize(im2, im2, Size(1920, 1080));
+	resize(im3, im3, Size(1920, 1080));
+
+	imshow("Imagem 1", im1);
+	imshow("Imagem 2", im2);
+	imshow("Imagem 3", im3);
+	waitKey(0);
+
+
+	return 0;
 }
 /*
 ---------------- -
@@ -111,52 +113,114 @@ int main(int argc, char** argv) {
 	cv::Mat imagem = cv::imread(caminho);
 	cv::imshow("Imagem", imagem);
 	cv::waitKey(0);
-	
-	//Para segundo commit 
+
+	//Para segundo commit
 
 	return 0;
 
 }*/
 
-using namespace cv;
-using namespace std;
+/*
+// OK FUNCIONANDO
 
 int main(int argc, char** argv)
 {
-    // Load images
-    Mat img1 = imread("image1.jpg", IMREAD_GRAYSCALE);
-    Mat img2 = imread("image2.jpg", IMREAD_GRAYSCALE);
+	// Carrega a imagem original e a imagem do template
+	cv::Mat img = cv::imread("C:/Users/kusan/Downloads/IMG_OPENCV/fish_2.jpg", cv::IMREAD_COLOR);
+	cv::Mat templ = cv::imread("C:/Users/kusan/Downloads/IMG_OPENCV/fish_1.jpg", cv::IMREAD_COLOR);
 
-    // Detect keypoints and extract features
-    Ptr<ORB> orb = ORB::create();
-    vector<KeyPoint> keypoints1, keypoints2;
-    Mat descriptors1, descriptors2;
-    orb->detectAndCompute(img1, noArray(), keypoints1, descriptors1);
-    orb->detectAndCompute(img2, noArray(), keypoints2, descriptors2);
+	// Cria a imagem resultado
+	cv::Mat result;
 
-    // Match features
-    vector<DMatch> matches;
-    Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create("BruteForce-Hamming");
-    matcher->match(descriptors1, descriptors2, matches);
+	// Realiza o template matching com o método TM_CCORR_NORMED
+	cv::matchTemplate(img, templ, result, cv::TM_CCORR_NORMED);
 
-    // Filter out bad matches
-    vector<Point2f> points1, points2;
-    for (size_t i = 0; i < matches.size(); i++)
-    {
-        points1.push_back(keypoints1[matches[i].queryIdx].pt);
-        points2.push_back(keypoints2[matches[i].trainIdx].pt);
-    }
-    vector<uchar> status(points1.size());
-    Mat fundamental = findFundamentalMat(points1, points2, FM_RANSAC, 3.0f, 0.99, status);
+	// Define o threshold para aceitar uma correspondência
+	double threshold = 0.8;
+	cv::Mat mask = (result >= threshold);
 
-    // Draw matched keypoints
-    Mat img_matches;
-    drawMatches(img1, keypoints1, img2, keypoints2, matches, img_matches,
-        Scalar::all(-1), Scalar::all(-1), status);
+	// Encontra os locais das correspondências
+	std::vector<cv::Point> locations;
+	cv::findNonZero(mask, locations);
 
-    // Show result
-    imshow("Matches", img_matches);
-    waitKey(0);
+	// Desenha um retângulo ao redor das correspondências encontradas
+	for (int i = 0; i < locations.size(); i++)
+	{
+		cv::Rect r(locations[i].x, locations[i].y, templ.cols, templ.rows);
+		cv::rectangle(img, r, cv::Scalar(0, 0, 255), 2);
+	}
 
-    return 0;
+	// Exibe a imagem resultado
+	cv::imshow("Resultado", img);
+	cv::waitKey();
+
+	return 0;
+}*/
+
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
+
+int main(int argc, char** argv)
+{
+	// Verifica se foram passados os nomes das duas imagens como argumentos
+	/*if (argc < 3)
+	{
+		std::cerr << "Usage: " << argv[0] << " <image1> <image2>" << std::endl;
+		return 1;
+	}*/
+
+	// Carrega as imagens
+	Mat img1 = imread("C:/Users/kusan/Downloads/IMG_OPENCV/Lenna2.png", IMREAD_COLOR);
+	Mat img2 = imread("C:/Users/kusan/Downloads/IMG_OPENCV/Lenna.png", IMREAD_COLOR);
+
+	// Verifica se as imagens foram carregadas corretamente
+	if (img1.empty() || img2.empty())
+	{
+		std::cerr << "Failed to load image(s)." << std::endl;
+		return 1;
+	}
+
+	// Define a escala máxima e mínima para a busca do objeto
+	double scale_max = 2.0;
+	double scale_min = 0.5;
+
+	// Define a quantidade de escalas a serem testadas
+	int num_scales = 10;
+
+	// Define o método de comparação
+	int method = TM_CCOEFF_NORMED;
+
+	// Cria uma janela para mostrar as imagens
+	namedWindow("Object Detection", WINDOW_NORMAL);
+
+	// Realiza a busca do objeto em diferentes escalas na primeira imagem
+	for (int i = 0; i < num_scales; i++)
+	{
+		double scale = scale_min + (scale_max - scale_min) * i / (num_scales - 1);
+
+		Mat img_scaled;
+		resize(img1, img_scaled, Size(), scale, scale);
+
+		Mat result;
+		matchTemplate(img_scaled, img2, result, method);
+
+		double min_val, max_val;
+		Point min_loc, max_loc;
+		minMaxLoc(result, &min_val, &max_val, &min_loc, &max_loc);
+
+		// Se a escala for igual a 1.0, marca o objeto encontrado na imagem original
+		if (scale == 1.0)
+		{
+			rectangle(img1, max_loc, Point(max_loc.x + img2.cols, max_loc.y + img2.rows), Scalar(0, 255, 0), 2);
+		}
+
+		std::cout << "Scale: " << scale << ", Match: " << max_val << std::endl;
+	}
+
+	// Mostra as imagens com os objetos marcados
+	imshow("Object Detection", img1);
+	waitKey(0);
+
+	return 0;
 }
