@@ -157,6 +157,10 @@ int main(int argc, char** argv)
 	return 0;
 }*/
 
+
+// QUASE FUNCIONANDO
+/*
+* 
 #include <opencv2/opencv.hpp>
 
 using namespace cv;
@@ -168,7 +172,7 @@ int main(int argc, char** argv)
 	{
 		std::cerr << "Usage: " << argv[0] << " <image1> <image2>" << std::endl;
 		return 1;
-	}*/
+	}
 
 	// Carrega as imagens
 	Mat img1 = imread("C:/Users/kusan/Downloads/IMG_OPENCV/Lenna2.png", IMREAD_COLOR);
@@ -224,3 +228,60 @@ int main(int argc, char** argv)
 
 	return 0;
 }
+*/
+
+
+// FUNCIONANDO OK COM IMAGENS IGUAIS
+
+#include <opencv2/opencv.hpp>
+#include <iostream>
+
+int main()
+{
+	// Carrega a imagem base e a imagem com o objeto a ser encontrado
+	cv::Mat img_base = cv::imread("C:/Users/kusan/Downloads/IMG_OPENCV/fish_1.jpg");
+	cv::Mat img_obj = cv::imread("C:/Users/kusan/Downloads/IMG_OPENCV/fish_2.jpg");
+
+	// Verifica se as imagens foram carregadas corretamente
+	if (img_base.empty() || img_obj.empty())
+	{
+		std::cerr << "Erro ao carregar imagens." << std::endl;
+		return -1;
+	}
+
+	// Cria uma matriz para armazenar o resultado do template matching
+	cv::Mat result;
+	int result_cols = img_base.cols - img_obj.cols + 1;
+	int result_rows = img_base.rows - img_obj.rows + 1;
+	result.create(result_rows, result_cols, CV_32FC1);
+
+	// Realiza o template matching com o método cv::TM_CCOEFF_NORMED
+	cv::matchTemplate(img_base, img_obj, result, cv::TM_CCOEFF_NORMED);
+
+	// Define um limiar para considerar a correspondência encontrada
+	double threshold = 0.8;
+
+	// Encontra os pontos onde a correspondência foi encontrada
+	cv::Point max_loc;
+	cv::minMaxLoc(result, nullptr, nullptr, nullptr, &max_loc);
+
+	// Verifica se a correspondência atingiu o limiar definido
+	if (result.at<float>(max_loc) >= threshold)
+	{
+		// Desenha um retângulo na imagem base indicando a correspondência encontrada
+		cv::rectangle(img_base, max_loc, cv::Point(max_loc.x + img_obj.cols, max_loc.y + img_obj.rows), cv::Scalar(0, 255, 0), 2);
+		std::cout << "Objeto encontrado na imagem base." << std::endl;
+	}
+	else
+	{
+		std::cout << "Objeto não encontrado na imagem base." << std::endl;
+	}
+
+	// Exibe as imagens com o resultado
+	cv::imshow("Imagem base", img_base);
+	cv::imshow("Imagem com objeto", img_obj);
+	cv::waitKey();
+
+	return 0;
+}
+
