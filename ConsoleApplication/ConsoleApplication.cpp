@@ -133,8 +133,6 @@ int main()
 	return 0;
 }
 
-
-
 //TM_CCORR
 //OK FUNCIONANDO
 /*
