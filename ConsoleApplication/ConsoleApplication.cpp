@@ -83,15 +83,15 @@ int main()
 
 //TM_CCOEFF_NORMED
 
-/*
+
 using namespace cv;
 using namespace std;
 
 int main()
 {
 	// Carrega a imagem de referência e a imagem a ser pesquisada
-	Mat img1 = imread("C:/Users/kusan/Downloads/IMG_OPENCV/Lenna.png", IMREAD_COLOR);
-	Mat img2 = imread("C:/Users/kusan/Downloads/IMG_OPENCV/Lenna3.png", IMREAD_COLOR);
+	Mat img1 = imread("C:/Users/kusan/Downloads/IMG_OPENCV/Bola_1.png", IMREAD_COLOR);
+	Mat img2 = imread("C:/Users/kusan/Downloads/IMG_OPENCV/Bola_2.png", IMREAD_COLOR);
 
 	//Lenna com Lenna3 = OK
 	//Peixe_1 com Peixe_2 = OK
@@ -131,7 +131,7 @@ int main()
 	waitKey(0);
 
 	return 0;
-}*/
+}
 
 
 
