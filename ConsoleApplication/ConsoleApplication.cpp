@@ -7,6 +7,7 @@
 #include <vector>
 
 //Imagens para teste
+//Imagens serão adicionadas no github
 //Lenna.png
 //Lenna2.png
 //Lenna3.png
