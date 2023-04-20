@@ -16,7 +16,7 @@ detectar a presença de um objeto em uma imagem.
 
 </h4>
 <h3><p>Link do Vídeo:  
-<a href="">Clique Aqui</a> EM BREVE</p> </h3><p>
+<a href="https://youtu.be/WVQb7ld04F0">Clique Aqui</a></p> </h3><p>
 <h2 Align="left">Referências: </h2>
 
 <h5 Align="justify">
