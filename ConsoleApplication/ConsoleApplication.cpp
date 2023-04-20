@@ -7,7 +7,7 @@
 #include <vector>
 
 //Imagens para teste
-//Imagens serão adicionadas no github pasta raiz
+//Imagens serão adicionadas no github
 //Lenna.png
 //Lenna2.png
 //Lenna3.png
@@ -82,9 +82,9 @@ int main()
 
 // OK FUNCIONANDO imagens diferentes, tamanho do objeto igual
 
-//TM_CCOEFF_NORMED
+//TM_CCOEFF_NORMED   
 
-
+/*
 using namespace cv;
 using namespace std;
 
@@ -133,7 +133,7 @@ int main()
 
 	return 0;
 }
-
+*/
 //TM_CCORR
 //OK FUNCIONANDO
 /*
@@ -340,3 +340,159 @@ int main()
 	return 0;
 }
 */
+
+/**************************************************************************************************/
+
+/*PROJETO PARTE 2 - 3ª VA*/
+
+
+//C:/Users/kusan/Downloads/IMG_OPENCV/Rua_movimentada_temp.jpg
+//C:/Users/kusan/Downloads/MG_OPENCV/Rua_movimentada.jpg
+
+using namespace std;
+using namespace cv;
+
+int main(int argc, char** argv)
+{
+	//if (argc < 3)
+	//{
+	//	cout << "Not enough parameters" << endl;
+	//	cout << "Usage:\n" << argv[0] << " <image_name> <template_name>" << endl;
+	//	return -1;
+	//}
+
+	// carrega a imagem e o template
+
+
+	//Imagens que estarão no projeto
+	//dois_homens_template.jpg  - dois_homens.jpg
+	//Rua_movimentada_temp.jpg  - Rua_movimentada.jpg
+
+	Mat img = imread("C:/Users/kusan/Downloads/IMG_OPENCV/Imagem e Template para comparar/Rua_movimentada.jpg", IMREAD_COLOR);
+	Mat templ = imread("C:/Users/kusan/Downloads/IMG_OPENCV/Imagem e Template para comparar/Rua_movimentada_temp.jpg", IMREAD_COLOR);
+
+	// verifica se a leitura dos arquivos foi feita corretamente
+	if (img.empty() || templ.empty())
+	{
+		cout << "Can't read one of the images" << endl;
+		return -1;
+	}
+
+	// cria janelas para visualização dos resultados
+	namedWindow("Source Image", WINDOW_AUTOSIZE);
+	namedWindow("Template Image", WINDOW_AUTOSIZE);
+	namedWindow("Result Image", WINDOW_AUTOSIZE);
+
+	// exibe as imagens carregadas nas janelas
+	imshow("Source Image", img);
+	imshow("Template Image", templ);
+
+	// vetor de métodos de correspondência de modelos a serem testados
+	vector<int> match_methods = { TM_SQDIFF, TM_SQDIFF_NORMED, TM_CCORR, TM_CCORR_NORMED, TM_CCOEFF, TM_CCOEFF_NORMED };
+
+	std::vector<cv::Mat> results(match_methods.size());
+	std::vector<std::string> match_names(match_methods.size());
+
+
+	// cria uma matriz para armazenar os resultados de cada método de correspondência de modelos
+	Mat result;
+
+	// armazena os valores de similaridade para cada método de correspondência de modelos
+	vector<double> match_values;
+
+	// executa cada método de correspondência de modelos e armazena seus resultados e valores de similaridade
+
+
+	for (int i = 0; i < match_methods.size(); i++)
+	{
+		// executa o método de correspondência de modelos atual
+		matchTemplate(img, templ, result, match_methods[i]);
+
+		// encontra o valor mínimo ou máximo da matriz de resultados, dependendo do método de correspondência de modelos
+		double match_value;
+		if (match_methods[i] == TM_SQDIFF || match_methods[i] == TM_SQDIFF_NORMED)
+		{
+			match_value = 1 - result.at<float>(0, 0);
+		}
+		else
+		{
+			Point match_loc;
+			minMaxLoc(result, NULL, &match_value, NULL, &match_loc);
+		}
+
+		// armazena o valor de similaridade calculado
+		match_values.push_back(match_value);
+
+		// exibe o resultado atual na janela de resultados
+		Mat result_display;
+		cvtColor(result, result_display, COLOR_GRAY2BGR);
+		rectangle(result_display, Point(0, 0), Point(result.cols - 1, result.rows - 1), Scalar(0, 255, 0), 2);
+		imshow("Result Image", result_display);
+
+		
+		//waitKey(5000);
+		waitKey(0);
+	}
+
+	// exibe os valores de similaridade calculados para cada método de correspondência de modelos
+	cout << "Match values: ";
+	for (int i = 0; i < match_methods.size(); i++)
+	{
+		cout << match_values[i] << " ";
+	}
+	cout << endl;
+
+	waitKey();
+
+	// Mostra as imagens resultantes de cada método de correspondência
+	for (int i = 0; i < match_methods.size(); i++)
+	{
+		Mat result = results[i];
+		double minVal, maxVal;
+		Point minLoc, maxLoc;
+		minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
+
+		// Mostra a correspondência com a maior correspondência (ou menor distância no caso de TM_SQDIFF)
+		Mat img_display;
+		img.copyTo(img_display);
+		rectangle(img_display, maxLoc, Point(maxLoc.x + templ.cols, maxLoc.y + templ.rows), Scalar::all(0), 2, 8, 0);
+		imshow(match_names[i], img_display);
+	}
+
+	// Aguarda a tecla 'ESC' ser pressionada para sair do programa
+	//while (true)
+	//{
+		//if (waitKey(30) == 27) break;
+		//waitKey();
+	//}
+	waitKey();
+	return 0;
+}
+
+
+/*
+int main(int argc, char** argv)
+{
+
+	cv::Mat image = cv::imread("C:/Users/kusan/Downloads/IMG_OPENCV/Rua_movimentada.jpg");
+
+	if (image.empty()) {
+		std::cout << "Imagem não encontrada!" << std::endl;
+		return -1;
+	}
+
+	cv::namedWindow("Imagem Original", cv::WINDOW_NORMAL);
+	cv::imshow("Imagem Original", image);
+	cv::waitKey(0);
+
+	cv::Mat image_temp = cv::imread("C:/Users/kusan/Downloads/IMG_OPENCV/Rua_movimentada_temp.jpg");
+
+	if (image_temp.empty()) {
+		std::cout << "Imagem não encontrada!" << std::endl;
+		return -1;
+	}
+
+	cv::namedWindow("Imagem Temporária", cv::WINDOW_NORMAL);
+	cv::imshow("Imagem Temporária", image_temp);
+	cv::waitKey(0);
+}*/
