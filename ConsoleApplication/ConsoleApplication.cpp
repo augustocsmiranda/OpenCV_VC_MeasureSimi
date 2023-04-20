@@ -367,9 +367,11 @@ int main(int argc, char** argv)
 	//Imagens que estarão no projeto
 	//dois_homens_template.jpg  - dois_homens.jpg
 	//Rua_movimentada_temp.jpg  - Rua_movimentada.jpg
+	//gear_imagem_temp.png      - gear_imagem.png
 
-	Mat img = imread("C:/Users/kusan/Downloads/IMG_OPENCV/Imagem e Template para comparar/Rua_movimentada.jpg", IMREAD_COLOR);
-	Mat templ = imread("C:/Users/kusan/Downloads/IMG_OPENCV/Imagem e Template para comparar/Rua_movimentada_temp.jpg", IMREAD_COLOR);
+
+	Mat img = imread("C:/Users/kusan/Downloads/IMG_OPENCV/Imagem e Template para comparar/gear_imagem.png", IMREAD_COLOR);
+	Mat templ = imread("C:/Users/kusan/Downloads/IMG_OPENCV/Imagem e Template para comparar/gear_imagem_temp.png", IMREAD_COLOR);
 
 	// verifica se a leitura dos arquivos foi feita corretamente
 	if (img.empty() || templ.empty())
